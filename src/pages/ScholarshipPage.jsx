@@ -1,51 +1,69 @@
-import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "animate.css/animate.min.css";
+import Footer from "../components/Footer";
 
-const ScholarshipDetailPage = () => {
+const ScholarshipPage = () => {
   return (
-    <div style={{ background: 'linear-gradient(to bottom, black, gray)', color: 'white', minHeight: '100vh' }}>
-      {/* Header Section */}
-      <header className="p-3 text-white" style={{ background: 'black' }}>
-        <div className="container d-flex justify-content-between align-items-center">
-          <h3>Online Education</h3>
-          <div>
-            <a href="#" className="text-white me-3"><i className="fab fa-facebook-f"></i></a>
-            <a href="#" className="text-white me-3"><i className="fab fa-twitter"></i></a>
-            <a href="#" className="text-white me-3"><i className="fab fa-linkedin-in"></i></a>
-            <a href="#" className="text-white"><i className="fab fa-youtube"></i></a>
+    <div className="bg-gradient-to-b from-gray-800 to-black text-white">
+
+      {/* <nav className="navbar navbar-expand-md bg-gradient-to-r from-black to-gray-800">
+        <div className="container">
+          <a href="/" className="navbar-brand text-white">LOGO</a>
+          <button className="navbar-toggler bg-white" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
+            <span className="navbar-toggler-icon"></span>
+          </button>
+          <div className="collapse navbar-collapse" id="navbarMenu">
+            <ul className="navbar-nav mx-auto">
+              {["Home", "Courses", "Events", "Blog", "Contact"].map((item) => (
+                <li key={item} className="nav-item">
+                  <a href={`/${item.toLowerCase()}`} className="nav-link text-white">{item}</a>
+                </li>
+              ))}
+            </ul>
+            <a href="/login" className="btn btn-outline-light">Login / Register</a>
           </div>
         </div>
-      </header>
+      </nav> */}
 
-      {/* Scholarship Section */}
-      <section className="container py-5">
-        <h2 className="text-center mb-4">Scholarships</h2>
-        <div className="row g-4">
-          {[
-            { title: "E-Learning Fellowship", amount: "$30.00", awards: "80", deadline: "July 02, 2020" },
-            { title: "Distance Learning Scholarship", amount: "$30.00", awards: "80", deadline: "July 05, 2020" },
-            { title: "United E-Learning Fellowship", amount: "$30.00", awards: "80", deadline: "July 08, 2020" },
-            { title: "Youngblood Scholarship", amount: "$30.00", awards: "80", deadline: "July 10, 2020" }
-          ].map((scholarship, index) => (
-            <div key={index} className="col-md-6">
-              <div className="p-4 rounded" style={{ background: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(5px)' }}>
-                <h3>{scholarship.title}</h3>
-                <p>Total: {scholarship.amount}</p>
-                <p>Awards: {scholarship.awards}</p>
-                <p>Deadline: {scholarship.deadline}</p>
-                <a href="#" className="btn btn-light">View Scholarship</a>
+      {/* Scholarship Details */}
+      <section className="py-16 px-6 bg-gradient-to-b from-gray-800 to-black text-white text-center">
+        <h2 className="animate__animated animate__fadeInUp">Distance Learning Scholarship</h2>
+      </section>
+
+      <section className="py-5">
+        <div className="container">
+          <div className="row g-4">
+            <div className="col-lg-4">
+              {[{ title: "Application Info", button: "Sign up to view" }, { title: "Amount Awarded", value: "$30,000" }, { title: "Deadline", value: "July 31, 2024" }].map(({ title, value, button }) => (
+                <div key={title} className="p-4 bg-gray-700 rounded animate__animated animate__fadeInLeft mb-3">
+                  <h3>{title}</h3>
+                  {button ? <a href="/login" className="btn btn-warning w-100">{button}</a> : <p className="fs-5">{value}</p>}
+                </div>
+              ))}
+            </div>
+            <div className="col-lg-8">
+              {[{ title: "Additional Information", content: "Distance learning scholarships are available for students taking online classes." }, { title: "Deadline Info", content: "All applications must be submitted before the deadline. Late applications will not be considered." }].map(({ title, content }) => (
+                <div key={title} className="p-4 bg-gray-900 rounded animate__animated animate__fadeInRight mb-3">
+                  <h3>{title}</h3>
+                  <p>{content}</p>
+                </div>
+              ))}
+              <div className="text-center mt-4">
+                <a href="/login" className="btn btn-primary btn-lg animate__animated animate__zoomIn">Sign up to view application info</a>
+              </div>
+              <div className="mt-4 p-3 bg-gray-700 text-center animate__animated animate__fadeInUp rounded">
+                <p>Save time! Fill out your Scholarship Match profile to get personalized scholarship results.</p>
+                <a href="/login" className="btn btn-success">Get My Results</a>
               </div>
             </div>
-          ))}
+          </div>
         </div>
       </section>
 
-      {/* Footer Section */}
-      <footer className="text-center p-3 mt-5" style={{ background: 'black', color: 'white' }}>
-        <p>&copy; 2025 E-Learning | All Rights Reserved</p>
-      </footer>
+      {/* <Footer /> */}
     </div>
   );
 };
 
-export default ScholarshipDetailPage;
+export default ScholarshipPage;
