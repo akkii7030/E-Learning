@@ -1,55 +1,120 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'animate.css/animate.min.css';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { auth, googleProvider } from "../firebase";
+import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { motion } from "framer-motion";
+import { FaGoogle, FaMoon, FaSun } from "react-icons/fa";
 
 const LoginPage = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [darkMode, setDarkMode] = useState(false);
+  const navigate = useNavigate();
+
+  // 🔹 Handle Email/Password Login
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      navigate("/dashboard"); // Redirect on successful login
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  // 🔹 Handle Google Login
+  const handleGoogleLogin = async () => {
+    try {
+      await signInWithPopup(auth, googleProvider);
+      navigate("/dashboard");
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   return (
-    <section className="login-page-main bg-gradient-to-r from-gray-900 to-gray-700 text-white py-16 animate__animated animate__fadeIn">
-      <div className="container mx-auto px-4">
-        <div className="flex justify-center items-center">
-          <div className="w-full max-w-lg bg-gray-800 p-8 rounded-lg shadow-lg animate__animated animate__zoomIn">
-            {/* Header */}
-            <div className="text-center mb-6 animate__animated animate__bounceInDown">
-              <Link to="/" className="block mb-4">
-                <img src="/image/logo.png" alt="Logo" className="mx-auto h-12 animate__animated animate__pulse animate__infinite" />
-              </Link>
-              <p className="text-gray-300">Login into your pages account</p>
-            </div>
+    <div
+      className={`flex items-center justify-center min-h-screen px-4 sm:px-6 lg:px-8 transition-colors duration-500 ${
+        darkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900"
+      }`}
+    >
+      {/* 🔹 Dark Mode Toggle */}
+      <button
+        onClick={() => setDarkMode(!darkMode)}
+        className="absolute top-5 right-5 text-2xl p-2 rounded-full bg-opacity-70 backdrop-blur-md shadow-md"
+      >
+        {darkMode ? <FaSun className="text-yellow-400" /> : <FaMoon className="text-gray-700" />}
+      </button>
 
-            {/* Login Form */}
-            <form method="POST" className="animate__animated animate__fadeInUp animate__delay-1s">
-              <div className="mb-4 animate__animated animate__fadeInLeft animate__delay-1s">
-                <input type="email" id="email" className="w-full px-4 py-2 rounded bg-gray-700 border border-gray-600 text-white" name="email" placeholder="Email" required />
-              </div>
-              <div className="mb-4 relative animate__animated animate__fadeInRight animate__delay-2s">
-                <input id="password" type="password" className="w-full px-4 py-2 rounded bg-gray-700 border border-gray-600 text-white" name="password" placeholder="********" required />
-              </div>
-              <div className="flex items-center mb-4 animate__animated animate__fadeInLeft animate__delay-3s">
-                <input id="checkbox1" type="checkbox" className="mr-2" />
-                <label htmlFor="checkbox1" className="text-gray-300">Keep me logged in</label>
-              </div>
-              <button type="submit" className="w-full py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded transition duration-300 animate__animated animate__heartBeat animate__delay-4s">Log in</button>
-            </form>
+      {/* 🔹 Login Card */}
+      <motion.div
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="w-full max-w-sm sm:max-w-md lg:max-w-lg bg-opacity-90 backdrop-blur-md shadow-lg rounded-3xl p-6 sm:p-8"
+        style={{
+          background: darkMode
+            ? "linear-gradient(135deg, rgba(25, 25, 25, 0.8), rgba(40, 40, 40, 0.8))"
+            : "linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(240, 240, 240, 0.8))",
+          boxShadow: darkMode
+            ? "10px 10px 20px rgba(0, 0, 0, 0.3), -10px -10px 20px rgba(255, 255, 255, 0.05)"
+            : "10px 10px 20px rgba(200, 200, 200, 0.3), -10px -10px 20px rgba(255, 255, 255, 0.8)",
+        }}
+      >
+        {/* 🔹 Header */}
+        <h2 className="text-2xl sm:text-3xl font-bold text-center mb-6">Welcome Back</h2>
 
-            {/* Social Login Section */}
-            <div className="text-center mt-6 animate__animated animate__fadeInUp animate__delay-5s">
-              <h3 className="text-gray-300">Or Login With</h3>
-              <div className="flex justify-center space-x-4 mt-4">
-                <a href="#" className="text-white bg-red-500 px-4 py-2 rounded hover:bg-red-600 transition animate__animated animate__bounce animate__delay-6s">Google</a>
-                <a href="#" className="text-white bg-blue-400 px-4 py-2 rounded hover:bg-blue-500 transition animate__animated animate__bounce animate__delay-7s">Twitter</a>
-                <a href="#" className="text-white bg-blue-600 px-4 py-2 rounded hover:bg-blue-700 transition animate__animated animate__bounce animate__delay-8s">Facebook</a>
-              </div>
-            </div>
+        {/* 🔹 Error Message */}
+        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
-            {/* Footer */}
-            <div className="text-center mt-6 animate__animated animate__fadeInUp animate__delay-9s">
-              <p className="text-gray-300">Don't have an account? <Link to="/register" className="text-blue-400 hover:text-blue-500">Register</Link></p>
-            </div>
-          </div>
+        {/* 🔹 Input Fields */}
+        <form onSubmit={handleLogin} className="space-y-4">
+          <input
+            type="email"
+            placeholder="Email"
+            className="w-full px-4 py-3 rounded-lg bg-opacity-70 backdrop-blur-md border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            className="w-full px-4 py-3 rounded-lg bg-opacity-70 backdrop-blur-md border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button className="w-full mt-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition transform hover:scale-105">
+            Log In
+          </button>
+        </form>
+
+        {/* 🔹 OR Divider */}
+        <div className="flex items-center justify-center my-4">
+          <hr className="w-1/4 border-gray-400" />
+          <span className="mx-2 text-gray-600 dark:text-gray-400">OR</span>
+          <hr className="w-1/4 border-gray-400" />
         </div>
-      </div>
-    </section>
+
+        {/* 🔹 Google Login */}
+        <button
+          onClick={handleGoogleLogin}
+          className="w-full flex items-center justify-center py-3 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg shadow-md transition transform hover:scale-105"
+        >
+          <FaGoogle className="mr-2" /> Continue with Google
+        </button>
+
+        {/* 🔹 Footer */}
+        <p className="text-center mt-6 text-gray-600 dark:text-gray-400">
+          Don't have an account?{" "}
+          <Link to="/register" className="text-blue-500 hover:underline">
+            Sign Up
+          </Link>
+        </p>
+      </motion.div>
+    </div>
   );
 };
 

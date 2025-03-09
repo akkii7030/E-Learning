@@ -1,11 +1,46 @@
 import React from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
 import "animate.css/animate.min.css";
 import Footer from "../components/Footer";
 
 const ElearningPage = () => {
+  const pricingPlans = [
+    {
+      plan: "Basic",
+      price: 99,
+      color: "#4382ff",
+      features: [
+        "Unlimited access to courses",
+        "Progress Report Available",
+        "High resolution videos",
+      ],
+    },
+    {
+      plan: "Standard",
+      price: 120,
+      color: "#554da7",
+      features: [
+        "Unlimited access to courses",
+        "Progress Report Available",
+        "High resolution videos",
+        "Certificate after completion",
+      ],
+    },
+    {
+      plan: "Premium",
+      price: 199,
+      color: "#f94fa4",
+      features: [
+        "Unlimited access to courses",
+        "Progress Report Available",
+        "High resolution videos",
+        "Certificate after completion",
+        "Private sessions",
+      ],
+    },
+  ];
+
   return (
-    <div className="bg-gradient-to-r from-black to-gray-800 text-white">
+    <div className="bg-gradient-to-r from-black to-gray-800 text-white min-h-screen">
       {/* Breadcrumb Section */}
       <section className="breadcrumb-area relative py-16 text-center">
         <div className="absolute inset-0">
@@ -24,49 +59,15 @@ const ElearningPage = () => {
 
       {/* Pricing Section */}
       <section className="our-pricing-area py-12">
-        <div className="container">
-          <div className="row justify-center">
-            {[
-              {
-                plan: "Basic",
-                price: 99,
-                color: "#4382ff",
-                features: [
-                  "Unlimited access to courses",
-                  "Progress Report Available",
-                  "High resolution videos",
-                ],
-              },
-              {
-                plan: "Standard",
-                price: 120,
-                color: "#554da7",
-                features: [
-                  "Unlimited access to courses",
-                  "Progress Report Available",
-                  "High resolution videos",
-                  "Certificate after completion",
-                ],
-              },
-              {
-                plan: "Premium",
-                price: 199,
-                color: "#f94fa4",
-                features: [
-                  "Unlimited access to courses",
-                  "Progress Report Available",
-                  "High resolution videos",
-                  "Certificate after completion",
-                  "Private sessions",
-                ],
-              },
-            ].map((item, index) => (
+        <div className="container mx-auto">
+          <div className="flex flex-wrap justify-center gap-8">
+            {pricingPlans.map((item, index) => (
               <div
-                className="col-lg-4 col-md-6 mb-6 animate__animated animate__fadeInUp"
+                className="w-full md:w-1/3 lg:w-1/4 animate__animated animate__fadeInUp"
                 data-wow-delay={`${0.1 * (index + 1)}s`}
                 key={index}
               >
-                <div className="pricing-box text-center bg-gray-900 p-8 rounded-xl shadow-lg transition-transform transform hover:scale-105">
+                <div className="pricing-box text-center bg-gray-900 p-8 rounded-xl shadow-lg transform transition hover:scale-105">
                   <div
                     className="pricing-header py-4 rounded-t-xl"
                     style={{ backgroundColor: item.color }}
@@ -100,9 +101,6 @@ const ElearningPage = () => {
           </div>
         </div>
       </section>
-
-      {/* Footer Section */}
-      <Footer />
     </div>
   );
 };

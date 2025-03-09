@@ -1,58 +1,113 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'animate.css/animate.min.css';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { auth, googleProvider } from "../firebase";
+import { motion } from "framer-motion";
+import { FaGoogle } from "react-icons/fa";
 
 const RegisterPage = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  // Handle Registration
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    setError("");
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      navigate("/dashboard");
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  // Handle Google Sign-in
+  const handleGoogleSignIn = async () => {
+    try {
+      await signInWithPopup(auth, googleProvider);
+      navigate("/dashboard");
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   return (
-    <section className="login-page-main bg-gradient-to-r from-gray-900 to-gray-700 text-white py-16 animate__animated animate__fadeIn">
-      <div className="container mx-auto px-4">
-        <div className="flex justify-center items-center">
-          <div className="w-full max-w-lg bg-gray-800 p-8 rounded-lg shadow-lg animate__animated animate__zoomIn">
-            {/* Header */}
-            <div className="text-center mb-6 animate__animated animate__bounceInDown">
-              <Link to="/" className="block mb-4">
-                <img src="/image/logo.png" alt="Logo" className="mx-auto h-12 animate__animated animate__pulse animate__infinite" />
-              </Link>
-              <p className="text-gray-300">Register into your pages account</p>
-            </div>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
+      <motion.div
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-lg bg-white shadow-lg rounded-2xl p-6 md:p-8"
+      >
+        {/* Header */}
+        <h2 className="text-2xl md:text-3xl font-bold text-center mb-6 text-gray-800">
+          Create an Account
+        </h2>
 
-            {/* Registration Form */}
-            <form method="POST" className="animate__animated animate__fadeInUp animate__delay-1s">
-              <div className="mb-4 animate__animated animate__fadeInLeft animate__delay-1s">
-                <input type="text" id="name" className="w-full px-4 py-2 rounded bg-gray-700 border border-gray-600 text-white" name="name" placeholder="Name" required />
-              </div>
-              <div className="mb-4 animate__animated animate__fadeInRight animate__delay-2s">
-                <input type="email" id="email" className="w-full px-4 py-2 rounded bg-gray-700 border border-gray-600 text-white" name="email" placeholder="Email" required />
-              </div>
-              <div className="mb-4 relative animate__animated animate__fadeInLeft animate__delay-3s">
-                <input id="password" type="password" className="w-full px-4 py-2 rounded bg-gray-700 border border-gray-600 text-white" name="password" placeholder="********" required />
-              </div>
-              <div className="flex items-center mb-4 animate__animated animate__fadeInRight animate__delay-4s">
-                <input id="checkbox1" type="checkbox" className="mr-2" />
-                <label htmlFor="checkbox1" className="text-gray-300">Keep me logged in</label>
-              </div>
-              <button type="submit" className="w-full py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded transition duration-300 animate__animated animate__heartBeat animate__delay-5s">Register</button>
-            </form>
+        {/* Error Message */}
+        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
-            {/* Social Login Section */}
-            <div className="text-center mt-6 animate__animated animate__fadeInUp animate__delay-6s">
-              <h3 className="text-gray-300">Or Register With</h3>
-              <div className="flex justify-center space-x-4 mt-4">
-                <a href="#" className="text-white bg-red-500 px-4 py-2 rounded hover:bg-red-600 transition animate__animated animate__bounce animate__delay-7s">Google</a>
-                <a href="#" className="text-white bg-blue-400 px-4 py-2 rounded hover:bg-blue-500 transition animate__animated animate__bounce animate__delay-8s">Twitter</a>
-                <a href="#" className="text-white bg-blue-600 px-4 py-2 rounded hover:bg-blue-700 transition animate__animated animate__bounce animate__delay-9s">Facebook</a>
-              </div>
-            </div>
+        {/* Registration Form */}
+        <form onSubmit={handleRegister} className="space-y-4">
+          <input
+            type="text"
+            placeholder="Full Name"
+            className="w-full px-4 py-3 border rounded-lg focus:ring focus:ring-blue-300"
+            required
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            className="w-full px-4 py-3 border rounded-lg focus:ring focus:ring-blue-300"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            className="w-full px-4 py-3 border rounded-lg focus:ring focus:ring-blue-300"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button
+            type="submit"
+            className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition"
+          >
+            Register
+          </button>
+        </form>
 
-            {/* Footer */}
-            <div className="text-center mt-6 animate__animated animate__fadeInUp animate__delay-10s">
-              <p className="text-gray-300">Already have an account? <Link to="/login" className="text-blue-400 hover:text-blue-500">Log In</Link></p>
-            </div>
-          </div>
+        {/* OR Divider */}
+        <div className="flex items-center justify-center my-6">
+          <hr className="w-1/4 border-gray-400" />
+          <span className="mx-3 text-gray-500">OR</span>
+          <hr className="w-1/4 border-gray-400" />
         </div>
-      </div>
-    </section>
+
+        {/* Google Registration */}
+        <button
+          onClick={handleGoogleSignIn}
+          className="w-full flex items-center justify-center py-3 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg shadow-md transition"
+        >
+          <FaGoogle className="mr-2" /> Continue with Google
+        </button>
+
+        {/* Footer */}
+        <p className="text-center mt-6 text-gray-600">
+          Already have an account?{" "}
+          <Link to="/login" className="text-blue-500 hover:underline">
+            Log In
+          </Link>
+        </p>
+      </motion.div>
+    </div>
   );
 };
 
