@@ -22,17 +22,24 @@ import ScholarshipDetailPage from "./pages/ScholarshipDetailPage";
 import ScholarshipPage from "./pages/ScholarshipPage";
 import TeacherProfilePage from "./pages/TeacherProfilePage";
 import TeachersPage from "./pages/TeachersPage";
+import Support from "./pages/support";
 
 function App() {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true); // Add a loading state
   const auth = getAuth();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
+      setLoading(false); // Set loading to false once the auth state is resolved
     });
     return () => unsubscribe();
   }, [auth]);
+
+  if (loading) {
+    return <div>Loading...</div>; // You can show a loading spinner or something here
+  }
 
   return (
     <Router>
@@ -42,7 +49,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
 
         {/* Protected Routes */}
-        <Route path="/" element={<PrivateRoute><Home Courses={<CourseSingle />} /></PrivateRoute>} />
+        <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
         <Route path="/about" element={<PrivateRoute><About /></PrivateRoute>} />
         <Route path="/contact" element={<PrivateRoute><Contact /></PrivateRoute>} />
         <Route path="/blog" element={<PrivateRoute><Blog /></PrivateRoute>} />
@@ -57,6 +64,7 @@ function App() {
         <Route path="/scholarship" element={<PrivateRoute><ScholarshipPage /></PrivateRoute>} />
         <Route path="/scholarship-detail" element={<PrivateRoute><ScholarshipDetailPage /></PrivateRoute>} />
         <Route path="/teacher-profile" element={<PrivateRoute><TeacherProfilePage /></PrivateRoute>} />
+        <Route path="/support" element={<PrivateRoute><Support /></PrivateRoute>} />
         <Route path="/teachers" element={<PrivateRoute><TeachersPage /></PrivateRoute>} />
       </Routes>
       {user && <Footer />} {/* Show Footer only if logged in */}
