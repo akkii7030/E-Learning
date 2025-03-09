@@ -22,7 +22,7 @@ import ScholarshipDetailPage from "./pages/ScholarshipDetailPage";
 import ScholarshipPage from "./pages/ScholarshipPage";
 import TeacherProfilePage from "./pages/TeacherProfilePage";
 import TeachersPage from "./pages/TeachersPage";
-import Support from "./pages/support";
+import Support from "./pages/Support";
 
 function App() {
   const [user, setUser] = useState(null);
